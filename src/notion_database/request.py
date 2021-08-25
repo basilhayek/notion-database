@@ -15,7 +15,10 @@ class Request:
         self.url = url
 
     def call_api_post(self, url, body):
-        r = requests.post(url, data=json.dumps(body), headers=self.HEADER).json()
+        if body is None:
+            r = requests.post(url, headers=self.HEADER).json()
+        else:
+            r = requests.post(url, data=json.dumps(body), headers=self.HEADER).json()
         return r
 
     def call_api_get(self, url):

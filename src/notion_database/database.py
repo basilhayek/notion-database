@@ -5,6 +5,8 @@ from notion_database.request import Request
 class Database:
     def __init__(self, integrations_token):
         self.url = 'https://api.notion.com/v1/databases'
+        #self.url = 'https://api.notion.com/v1/search'
+        self.integrations_token = integrations_token
         self.result = {}
         self.request = Request(self.url, integrations_token=integrations_token)
 
@@ -33,8 +35,10 @@ class Database:
         self.result = self.request.call_api_post(self.url + "/" + database_id + "/query", body)
 
     def list_databases(self, page_size=100):
-        url = self.url + f"?page_size={str(page_size)}"
-        self.result = self.request.call_api_get(url)
+        url = 'https://api.notion.com/v1/search'
+        url = url + f"?page_size={str(page_size)}"
+        request = Request(url, integrations_token=self.integrations_token)
+        self.result = request.call_api_post(url, body={'filter': {'value': 'database', 'property': 'object'}})
 
     def create_database(self, page_id, title, properties=None):
         if properties is None:

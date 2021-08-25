@@ -19,15 +19,29 @@ logger = logging.getLogger(__name__)
 
 NOTION_KEY = os.getenv('NOTION_KEY')
 
-# List Database
-logger.debug("List Database")
-D = Database(integrations_token=NOTION_KEY)
-D.list_databases(page_size=100)
+def main():
 
-for i in D.result["results"]:
-    database_id = i["id"]
-    logger.debug(database_id)
 
+    # List Database
+    logger.debug("List Database")
+    D = Database(integrations_token=NOTION_KEY)
+    D.list_databases(page_size=100)
+
+    print(D.result)
+
+    for i in D.result["results"]:
+        database_id = i["id"]
+        logger.debug(database_id)
+        run_retrieve_suite(database_id)
+
+def run_retrieve_suite(database_id):
+    logger.debug("** Retrieve suite")
+    D = Database(integrations_token=NOTION_KEY)
+    D.retrieve_database(database_id=database_id)
+    print()    
+
+
+def run_full_suite(database_id):
     # Retrieve Database
     logger.debug("Retrieve Database")
     D = Database(integrations_token=NOTION_KEY)
@@ -99,3 +113,6 @@ for i in D.result["results"]:
     pprint.pprint(D.result)
 
     # D.run_query_database(database_id=database_id, body={})
+
+if __name__ == "__main__":
+    main()
