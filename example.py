@@ -6,6 +6,7 @@ import time
 from notion_database.database import Database
 from notion_database.page import Page
 from notion_database.properties import Properties, Children
+from notion_database.search import Search
 
 try:
     from dotenv import load_dotenv
@@ -24,12 +25,12 @@ def main():
 
     # List Database
     logger.debug("List Database")
-    D = Database(integrations_token=NOTION_KEY)
-    D.list_databases(page_size=100)
+    S = Search(integrations_token=NOTION_KEY)
+    S.search_dbs()
 
-    print(D.result)
+    print(S.result)
 
-    for i in D.result["results"]:
+    for i in S.result["results"]:
         database_id = i["id"]
         logger.debug(database_id)
         run_retrieve_suite(database_id)
@@ -38,7 +39,7 @@ def run_retrieve_suite(database_id):
     logger.debug("** Retrieve suite")
     D = Database(integrations_token=NOTION_KEY)
     D.retrieve_database(database_id=database_id)
-    print()    
+    print(D.result)    
 
 
 def run_full_suite(database_id):
